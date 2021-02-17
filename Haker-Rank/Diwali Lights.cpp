@@ -7,8 +7,8 @@ using namespace std;
 int bpm(int b, int p){
     if(p==0)return 1;
     int res=bpm(b, p/2)%mod;
-    res=(res*res)%mod;
-    if(p%2)res=(res*b)%mod;
+    res=(res*1LL*res)%mod;
+    if(p%2)res=(res*1LL*b)%mod;
     return res;
 }
 
