@@ -1,4 +1,4 @@
-///Implemention
+///Implementation
 ///9-3-2021
 
 #include<bits/stdc++.h>
@@ -6,7 +6,7 @@ using namespace std;
 typedef long long ll;
 const ll inf = 1e9;
 
-#define all(x)          (x).begin(), (x).end()
+#define all(x)          (x).begin(), (x).enkd()
 #define read(x)         freopen("in.txt","r",stdin);
 #define write(x)        freopen("out.txt","w",stdout);
 #define what_is(x)      cerr<<#x<<" is "<<x<<"\n";
@@ -40,7 +40,7 @@ void solve(){
         }
     }
     while(r+1<n and arr[r+1]==arr[r])r++;
-    //while(l-1>=0 and arr[l-1]==arr[l-1])l--;
+    while(l-1>=0 and arr[l-1]==arr[l])l--;
     swap(arr[l], arr[r]);
 
 

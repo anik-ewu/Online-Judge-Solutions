@@ -1,101 +1,94 @@
-///SPOJ: KGSS
-///Approach : Segment Tree
-///( Another Solution Is Update The max value with -1 , and query again to get the second max )
+/*
+Date: 9-April-2021
+Tags: Classical Segment Tree / Range Query
+Notes: For getting 2 max values in the range: get the first max value and its index. Then update
+that index with negative value then query again and finally update the negative value with the original one.
+*/
+
 #include<bits/stdc++.h>
 using namespace std;
-#define N 100005
-int L,R;
+#define Fast   ios_base::sync_with_stdio(false);cin.tie(0);cout.tie(0);
+
+const int      N =1e5+5;
+
+int L, R;
 int arr[N];
-struct node{
+struct st{
     int val;
-    int idx;
+    int id;
 }tree[4*N];
 
 void build(int at, int l, int r){
 
     if(l==r){
-        tree[at].val=arr[l];
-        tree[at].idx=l;
+        tree[at]={arr[l], l};
         return;
     }
     int mid=(l+r)/2;
-    build(at*2,l,mid);
-    build(at*2+1,mid+1,r);
-    if(tree[at*2].val>tree[at*2+1].val)
+    build(at*2, l, mid);
+    build(at*2+1, mid+1, r);
+    if(tree[at*2].val>=tree[at*2+1].val)
         tree[at]=tree[at*2];
     else
         tree[at]=tree[at*2+1];
 }
 
-void update(int at, int l, int r,int id, int vl){
-
-    if(id<l || id>r)return;
+void update(int at, int l, int r, int idx){
 
     if(l==r){
-        arr[id]=vl;
-        tree[at].val=arr[l];
-        tree[at].idx=id;
+        tree[at]={arr[l], l};
         return;
     }
     int mid=(l+r)/2;
-    if(id<=mid)
-        update(at*2,l,mid,id,vl);
-    else
-        update(at*2+1,mid+1,r,id,vl);
-    if(tree[at*2].val>tree[at*2+1].val)
+    if(idx<=mid)update(at*2, l, mid, idx);
+    else update(at*2+1, mid+1, r, idx);
+    if(tree[at*2].val>=tree[at*2+1].val)
         tree[at]=tree[at*2];
     else
         tree[at]=tree[at*2+1];
 }
 
-struct node query(int at, int l, int r){
 
-    if(R<l || r<L)return{-1,0};
-    if(L<=l && r<=R){
-        return tree[at];
-    }
+struct st query(int at, int l, int r){
+    if(R<l || r<L)return {-N,0};
+    if(L<=l and r<=R)return tree[at];
     int mid=(l+r)/2;
-    struct node q1=query(at*2,l,mid);
-    struct node q2=query(at*2+1,mid+1,r);
-    if(q1.val>q2.val)
-        return q1;
-    else
-        return q2;
-};
+    struct st x=query(at*2, l, mid);
+    struct st y=query(at*2+1, mid+1, r);
+    if(x.val>=y.val)return x;
+    else return y;
+}
 
 int main(){
 
-    int n,i,q;
-    scanf("%d",&n);
-    for(i=1; i<=n; i++){
-        scanf("%d",&arr[i]);
-    }
-    build(1,1,n);
-    scanf("%d",&q);
-    char tp;
-    int sum;
-    int id,vl,S_R;
-    struct node s1,s2,s3;
+    Fast;
+    //read(x);
+    //write(x);
+    char ch;
+    int n, t, q, id;
+    cin>>n;
+    for(int i=1; i<=n; i++)cin>>arr[i];
+    build(1, 1, n);
+    cin>>q;
     while(q--){
-        tp=getchar();///ignoring digit or Enter
-        tp=getchar();
-        if(tp=='Q'){
-          scanf("%d%d",&L,&R);
-          S_R=R;
-          s1=query(1,1,n);
-          sum=s1.val;
-          R=s1.idx-1;
-          s2=query(1,1,n);
-          R=S_R;
-          L=s1.idx+1;
-          s3=query(1,1,n);
-          sum+=max(s2.val,s3.val);
-          printf("%d\n",sum);
+        cin>>ch;
+        if(ch=='U'){
+            cin>>id;
+            cin>>arr[id];
+            update(1, 1, n, id);
         }
         else{
-            scanf("%d%d",&id,&vl);
-            update(1,1,n,id,vl);
-        }
+            cin>>L>>R;
+            st x=query(1, 1, n);
+            arr[x.id]=-N;
+            update(1, 1, n, x.id);
+            st y=query(1, 1, n);
+            arr[x.id]=x.val;
+            update(1, 1, n, x.id);
+
+            cout<<x.val+y.val<<endl;
+
+            }
     }
     return 0;
 }
