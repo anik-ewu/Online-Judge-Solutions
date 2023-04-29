@@ -11,37 +11,34 @@ const int N= 1e5+5;
 
 int main(){
 
-    int n, val;
-    cin>>n;
+    int t, n, a;
+    cin>>t;
+    while (t--) {
 
-    int minimum = INT_MAX;
-    int second_minimum = INT_MAX;
+        cin>>n;
+        vector<int>arr(n);
+        set<int>initial_set;
 
-    for (int i = 1; i <= n; i++) {
-        cin>>val;
-        if (i == 1) {
-            minimum = val;
+        for (int i = 0; i < n; i++) {
+            cin>>a;
+            initial_set.insert(a);
         }
-        else {
-            if (val < minimum) {
-                second_minimum = minimum;
-                minimum = val;
+
+        int res = -1;
+        for (int i = 1; i < 1024;  i++) {
+            set<int>modified_set;
+            for (int val: initial_set) {
+                int x = val ^ i;
+                modified_set.insert(x);
             }
-            else if(val < second_minimum && val != minimum) {
-                second_minimum = val;
+            if (modified_set == initial_set) {
+                res = i;
+                break;
             }
         }
-//        what_is(minimum);
-//        what_is(second_minimum);
-    }
 
-    if (second_minimum == INT_MAX || second_minimum == minimum) {
-        cout<<"NO"<<endl;
-    }
-    else {
-        cout<<second_minimum<<endl;
+        cout<<res<<endl;
     }
 
     return 0;
 }
-
