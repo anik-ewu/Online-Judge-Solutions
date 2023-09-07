@@ -15,36 +15,63 @@ int main(){
     cin>>t;
     while (t--) {
         cin>>l>>r;
-        
+        a = 0;
+        b = 0;
         for (int i = 2; i <= 3; i++) {
             int x = i;
             int y = l - i;
 
-            if (x + y >= l && x + y <= r && y > 0) {
-                int GCD = __gcd(a, b);
+            if (y > 0) {
+                int GCD = __gcd(x, y);
                 if (GCD != 1) {
                     a = x;
                     b = y;
                     break;
                 }
             }
+
+            x = i;
+            y = r - i;
+
+            if (y > 0) {
+                int GCD = __gcd(x, y);
+                if (GCD != 1) {
+                    a = x;
+                    b = y;
+                    break;
+                }
+            }
+
+            x = i;
+            y = r - i - 1;
+
+            if (x + y >= l && x + y <= r && y > 0) {
+                int GCD = __gcd(x, y);
+                if (GCD != 1) {
+                    a = x;
+                    b = y;
+                    break;
+                }
+            }
+
+
         }
 
-        for (int i = 2; i <= 3; i++) {
-            a = i;
-            b = l - i;
-
-            if (a + b >= l && a + b <= r && b > 0) {
-                int GCD = __gcd(a, b);
-                if (GCD != 1) {
+        if (!(a + b) && l == r) {
+            for (int i = 2; i * i <= l; i++) {
+                if (l % i == 0) {
+                    a = i;
+                    b = l - i;
                     break;
                 }
             }
         }
 
-
-
-
+        if (a + b) {
+            cout<<a<<' '<<b<<endl;
+        } else {
+            cout<<-1<<endl;
+        }
 
     }
 
